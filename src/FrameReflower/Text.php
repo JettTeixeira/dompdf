@@ -467,9 +467,14 @@ class Text extends AbstractFrameReflower
             $style->border_right_width,
             $style->margin_right), $line_width);
         $min += $delta;
+        $min_word = $min;
         $max += $delta;
 
-        return $this->_min_max_cache = array($min, $max, "min" => $min, "max" => $max);
+        if ($style->word_wrap === 'break-word') {
+            $min = $delta + $this->getFontMetrics()->getTextWidth(mb_substr($str, 0, 1), $font, $size, $word_spacing, $char_spacing);
+        }
+
+        return $this->_min_max_cache = array($min, $max, $min_word, "min" => $min, "max" => $max, 'min_word' => $min_word);
     }
 
     /**
